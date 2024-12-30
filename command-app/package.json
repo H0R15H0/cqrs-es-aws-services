@@ -1,6 +1,6 @@
 {
   "name": "command-app",
-  "type": "module",
+  "module": "esnext",
   "scripts": {
     "dev": "tsx watch src/index.ts"
   },
