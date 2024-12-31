@@ -1,12 +1,36 @@
-import type { ID } from "domain/models/common";
 import type { newtype } from "lib/newtype";
+import type { ID } from "domain/models/common";
 
-export type Item = newtype<
-	"Item",
+export type ItemID = newtype<
+	"ItemID",
 	{
-		readonly id: ID;
-		readonly name: ItemName;
+		readonly value: ID;
 	}
 >;
 
-export type ItemName = newtype<"ItemName", string>;
+export type ItemVersion = newtype<
+	"ItemVersion",
+	{
+		readonly value: number;
+	}
+>;
+
+export const createItemVersion = (value: number): ItemVersion =>
+	({ value }) as ItemVersion;
+
+export type ItemCreatedAt = newtype<
+	"ItemCreatedAt",
+	{
+		readonly value: Date;
+	}
+>;
+
+export const createItemCreatedAt = (value: Date): ItemCreatedAt =>
+	({ value }) as ItemCreatedAt;
+
+export type ItemName = newtype<
+	"ItemName",
+	{
+		readonly value: string;
+	}
+>;

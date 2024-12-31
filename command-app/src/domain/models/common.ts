@@ -1,3 +1,8 @@
 import type { newtype } from "lib/newtype";
 
-export type ID = newtype<"ID", string>;
+export type ID = newtype<
+	"ID",
+	{
+		readonly value: string;
+	}
+>;
