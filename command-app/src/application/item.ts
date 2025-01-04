@@ -1,3 +1,5 @@
+import { createItem } from "domain/aggregates/item";
+import { v7 } from "uuid";
 import {
 	createItemName,
 	type ItemNameError,
@@ -5,8 +7,10 @@ import {
 	type ItemPrice,
 	type ItemPriceError,
 	createItemPrice,
+	createItemID,
 } from "domain/models/item";
 import { err, ok, Result } from "neverthrow";
+import { createID, type IDError } from "domain/models/common";
 
 type RegisterItemCommand = {
 	name: string;
@@ -31,12 +35,21 @@ const validateRegisterItem = (
 	return values.map(([name, price]) => ({ name, price }));
 };
 
-export type RegisterItemServiceError = RegisterItemValidationError;
+type RegisterItemServiceError =
+	| RegisterItemValidationError
+	| RegisterItemUnrecoverableError;
+
+type RegisterItemUnrecoverableError = IDError;
 
 export const RegisterItemService = (
 	command: RegisterItemCommand,
 ): Result<boolean, RegisterItemServiceError> => {
+	const id = ok(v7()).andThen(createID).andThen(createItemID);
+	if (id.isErr()) {
+		return err(id.error);
+	}
 	return ok(command)
 		.andThen(validateRegisterItem)
+		.andThen((v) => createItem(id.value, v.name, v.price))
 		.map(() => true);
 };

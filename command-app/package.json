@@ -7,11 +7,13 @@
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "hono": "^4.6.15",
-    "neverthrow": "^8.1.1"
+    "neverthrow": "^8.1.1",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/node": "^20.11.17",
+    "@types/uuid": "^10.0.0",
     "tsx": "^4.7.1"
   }
 }

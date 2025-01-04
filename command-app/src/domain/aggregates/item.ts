@@ -8,6 +8,7 @@ import {
 	type ItemName,
 	type ItemVersion,
 } from "domain/models/item";
+import { ok, type Result } from "neverthrow";
 
 export type Item = newtype<
 	"Item",

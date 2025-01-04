@@ -9,6 +9,11 @@ export type ItemID = newtype<
 	}
 >;
 
+export const createItemID = (value: ID): Result<ItemID, never> => {
+	const id = { value } as ItemID;
+	return ok(id);
+};
+
 export type ItemVersion = newtype<
 	"ItemVersion",
 	{
