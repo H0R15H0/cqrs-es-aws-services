@@ -10,7 +10,7 @@ export type ItemEventRepositoryPersistEventAndSnapshotUnrecoverableError =
 	"UnknownError";
 
 export interface ItemEventRepository {
-	PersistEventAndSnapshot(
+	persistEventAndSnapshot(
 		event: ItemEvent,
 		snapshot: Item,
 	): ResultAsync<undefined, ItemEventRepositoryPersistEventAndSnapshotError>;

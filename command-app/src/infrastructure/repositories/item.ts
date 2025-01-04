@@ -7,7 +7,7 @@ import type { ResultAsync } from "neverthrow";
 
 export const createItemEventRepository = (): ItemEventRepository => {
 	return {
-		PersistEventAndSnapshot(
+		persistEventAndSnapshot(
 			event: ItemEvent,
 			snapshot: Item,
 		): ResultAsync<undefined, ItemEventRepositoryPersistEventAndSnapshotError> {

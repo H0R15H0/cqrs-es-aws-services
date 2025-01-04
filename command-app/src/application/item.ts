@@ -59,7 +59,7 @@ export const RegisterItemService = (
 		.andThen(validateRegisterItem)
 		.andThen((v) => createItem(id.value, v.name, v.price))
 		.asyncAndThen((v) =>
-			repositories.ItemEvent().PersistEventAndSnapshot(v[0], v[1]),
+			repositories.itemEvent().persistEventAndSnapshot(v[0], v[1]),
 		)
 		.map(() => true);
 };
