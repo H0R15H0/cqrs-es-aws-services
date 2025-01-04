@@ -9,8 +9,11 @@ import {
 	createItemPrice,
 	createItemID,
 } from "domain/models/item";
-import { err, ok, Result } from "neverthrow";
+import { errAsync, ok, Result, type ResultAsync } from "neverthrow";
 import { createID, type IDError } from "domain/models/common";
+import type { Repositories } from "domain/repositories/common";
+import type { ItemEventRepositoryPersistEventAndSnapshotUnrecoverableError } from "domain/repositories/item";
+import type { ConflictError } from "lib/errors";
 
 type RegisterItemCommand = {
 	name: string;
@@ -37,19 +40,26 @@ const validateRegisterItem = (
 
 type RegisterItemServiceError =
 	| RegisterItemValidationError
+	| ConflictError
 	| RegisterItemUnrecoverableError;
 
-type RegisterItemUnrecoverableError = IDError;
+type RegisterItemUnrecoverableError =
+	| IDError
+	| ItemEventRepositoryPersistEventAndSnapshotUnrecoverableError;
 
 export const RegisterItemService = (
 	command: RegisterItemCommand,
-): Result<boolean, RegisterItemServiceError> => {
+	repositories: Repositories,
+): ResultAsync<boolean, RegisterItemServiceError> => {
 	const id = ok(v7()).andThen(createID).andThen(createItemID);
 	if (id.isErr()) {
-		return err(id.error);
+		return errAsync(id.error);
 	}
 	return ok(command)
 		.andThen(validateRegisterItem)
 		.andThen((v) => createItem(id.value, v.name, v.price))
+		.asyncAndThen((v) =>
+			repositories.ItemEvent().PersistEventAndSnapshot(v[0], v[1]),
+		)
 		.map(() => true);
 };
