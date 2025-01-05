@@ -19,19 +19,21 @@ const client = new DynamoDBClient({});
 
 export const createItemEventRepository = (): ItemEventRepository => {
 	return {
-		persistEventAndSnapshot(
-			event: ItemEvent,
-			snapshot: Item,
-		): ResultAsync<undefined, ItemEventRepositoryPersistEventAndSnapshotError> {
-			// dynamodb transactionを使って保存すると安全だがスキップ
-			return ok(event)
-				.map(eventToParams)
-				.asyncAndThen(putItem)
-				.map(() => snapshot)
-				.map(snapshotToParams)
-				.andThen(putItem);
-		},
+		persistEventAndSnapshot,
 	};
+};
+
+const persistEventAndSnapshot = (
+	event: ItemEvent,
+	snapshot: Item,
+): ResultAsync<undefined, ItemEventRepositoryPersistEventAndSnapshotError> => {
+	// dynamodb transactionを使って保存すると安全だがスキップ
+	return ok(event)
+		.map(eventToParams)
+		.asyncAndThen(putItem)
+		.map(() => snapshot)
+		.map(snapshotToParams)
+		.andThen(putItem);
 };
 
 const eventToParams = (event: ItemEvent): PutItemCommandInput => {
