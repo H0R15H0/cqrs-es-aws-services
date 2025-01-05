@@ -24,6 +24,8 @@ export type ItemVersion = newtype<
 export const createItemVersion = (value: number): ItemVersion =>
 	({ value }) as ItemVersion;
 
+export type ItemEventName = "ItemCreated";
+
 export type ItemCreatedAt = newtype<
 	"ItemCreatedAt",
 	{

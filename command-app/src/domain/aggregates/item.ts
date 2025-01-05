@@ -7,6 +7,7 @@ import {
 	type ItemID,
 	type ItemName,
 	type ItemVersion,
+	type ItemEventName,
 } from "domain/models/item";
 import { ok, type Result } from "neverthrow";
 
@@ -14,6 +15,7 @@ export type Item = newtype<
 	"Item",
 	{
 		readonly id: ItemID;
+		readonly version: ItemVersion;
 		readonly name: ItemName;
 		readonly price: ItemPrice;
 	}
@@ -24,6 +26,7 @@ export type ItemEvent = newtype<
 	{
 		readonly id: ItemID;
 		readonly version: ItemVersion;
+		readonly eventName: ItemEventName;
 		readonly createdAt: ItemCreatedAt;
 		readonly payload: ItemEventPayload;
 	}
@@ -49,10 +52,12 @@ export const createItem = (
 	name: ItemName,
 	price: ItemPrice,
 ): Result<[ItemEvent, Item], never> => {
-	const item = { id, name, price } as Item;
+	const version = createItemVersion(1);
+	const item = { id, version, name, price } as Item;
 	const event = {
 		id,
-		version: createItemVersion(1),
+		version: version,
+		eventName: "ItemCreated",
 		createdAt: createItemCreatedAt(new Date()),
 		payload: createItemCreatedEventPayload(name, price),
 	} as ItemEvent;
