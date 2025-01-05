@@ -34,6 +34,12 @@ export type ItemEvent = newtype<
 
 export type ItemEventPayload = ItemCreatedEventPayload;
 
+export const payload2Bytes = (payload: ItemEventPayload): Uint8Array =>
+	new TextEncoder().encode(JSON.stringify(payload));
+
+export const bytes2Payload = (bytes: Uint8Array): ItemEventPayload =>
+	JSON.parse(new TextDecoder().decode(bytes));
+
 export type ItemCreatedEventPayload = newtype<
 	"ItemCreatedEventPayload",
 	{
